@@ -39,7 +39,7 @@ jobs:
           -language de \
           -jurisdiction de \
           -display-issues-are-warnings \
-          - ig hl7.fhir.eu.base#0.1.0
+          -ig hl7.fhir.eu.base#0.1.0
       continue-on-error: true
       
     - name: Convert Validation Report
