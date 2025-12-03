@@ -51,7 +51,7 @@ jobs:
           output/validation.html 
                
     - name: Convert Validation Report
-      uses: patrick-werner/validation-outcome-markdown-renderer@v1
+      uses: patrick-werner/validation-outcome-markdown-renderer@v1.2.2
       with:
         bundle-file: output/validation-outcome.json
         include: warnings
