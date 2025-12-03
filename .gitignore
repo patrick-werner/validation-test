@@ -1,0 +1,14 @@
+# Output files
+output/
+
+# Validator JAR
+validator_cli.jar
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.iml

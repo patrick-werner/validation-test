@@ -1,0 +1,58 @@
+name: FHIR Validation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Download FHIR Validator
+      run: |
+        wget https://github.com/hapifhir/org.hl7.fhir.core/releases/latest/download/validator_cli.jar
+        
+    - name: Create output directory
+      run: mkdir -p output
+        
+    - name: Validate FHIR Bundle
+      run: |
+        java -jar validator_cli.jar input/ \
+          -version 4.0.1 \
+          -allow-example-urls true \
+          -output output/validation-outcome.json \
+          -html-output output/validation.html \
+          -show-message-ids \
+          -language de \
+          -jurisdiction de \
+          -display-issues-are-warnings \
+          - ig hl7.fhir.eu.base#0.1.0
+      continue-on-error: true
+      
+    - name: Convert Validation Report
+      uses: patrick-werner/validation-outcome-markdown-renderer@v1
+      with:
+        bundle-file: output/validation-outcome.json
+        include: warnings
+        filters: |
+          # Struktur: fileName|messageId|detailsWildcard|location
+        
+    - name: Upload validation results
+      uses: actions/upload-artifact@v5
+      with:
+        name: validation-results
+        path: |
+          validation-outcome.json
