@@ -41,7 +41,15 @@ jobs:
           -display-issues-are-warnings \
           -ig hl7.fhir.eu.base#0.1.0
       continue-on-error: true
-      
+
+    - name: Upload validation results
+      uses: actions/upload-artifact@v5
+      with:
+        name: validation-results
+        path: |
+          output/validation-outcome.json
+          output/validation.html 
+               
     - name: Convert Validation Report
       uses: patrick-werner/validation-outcome-markdown-renderer@v1
       with:
@@ -55,4 +63,5 @@ jobs:
       with:
         name: validation-results
         path: |
-          validation-outcome.json
+          output/validation-outcome.json
+          output/validation.html
